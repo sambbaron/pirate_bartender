@@ -1,4 +1,4 @@
-# Pirate Bartender with selected revisions from sample solution
+# Pirate Bartender with cocktail naming and multiple drinks
 
 import random
 
