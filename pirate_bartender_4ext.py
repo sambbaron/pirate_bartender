@@ -20,6 +20,9 @@ ingredients = {
     "fruity": ["slice of orange", "dash of cassis", "cherry on top"]
 }
 
+# Define customers dictionary - customer name:style answer dictionary
+customers = {}
+
 def drink_style_input():
   """Ask user what style of drink they like"""
   # Define answered style questions dictionary
@@ -59,37 +62,46 @@ def drink_name():
 
 def main():
   """Run Pirate Bartender - Ask user for styles and return drink ingredients"""
-  # Define questions for subsequent drinks
-  drink_questions = ["Would you like a drink?  Please answer (y)es or (n)o.", 
-                    "How about another?",
-                    "Must have been a hard day swabbing decks. Another drink?",
-                    "Alright pal, do you want another drink?  You're not driving the ship home, are you?",
-                    "You drunk bastard.  I'm cutting you off."]
-  # Loop through customer questions
-  for question in drink_questions:
-    # Ask drink question
+  customer_name = ""
+  
+  # Test whether customer wants a drink
+  while raw_input("Greetings you pirate rascal, would you like a drink?  Please answer (y)es or (n)o.") in ["y","yes"]:
     print ""
-    customer_answer = raw_input(question) in ["y","yes"]
-    print ""
-    # Test for positive answer - if so, then make drink
-    if customer_answer == True and drink_questions.index(question) != len(drink_questions):
-      print "Answer ye some riddles about your favorite libation. Please answer (y)es or (n)o."
-      print ""
-      answers_style = drink_style_input()
-      print ""
-      # Test whether any answers are yes
-      if not answers_style:
-        print "Don't care for a drink, eh?"
-        break
+    # Test whether return customer
+    if raw_input("Hey buddy, have I seen you before?") in ["y","yes"]:
+      customer_name = raw_input("Ah, what's your name again?")
+      # Set drink preferences either with customer info or customer input                     
+      if customer_name in customers:
+        if raw_input("Good to see you {}. Do you want me to use your past drink preferences?".format(customer_name)) in ["y","yes"]:
+          drink_preferences = customers[customer_name]
+        else:     
+          # Ask customer for preferred drink styles
+          drink_preferences = drink_style_input()
       else:
-        drink = drink_make(answers_style)
-        print "Here is your: {}, which includes:".format(drink_name())
-        for ingredient in drink:
-          print "A {}".format(ingredient)
+        print "Sorry {}, doesn't ring a bell so let me ask you a few questions.".format(customer_name)
+        drink_preferences = drink_style_input()
     else:
-      if drink_questions.index(question) > 0:
-        print "See ya later, and you better tip me well or I'll cut off your other leg."
-      break
+      print "Welcome, let's find out what you like."
+      drink_preferences = drink_style_input()
+
+    # Test whether any styles are selected
+    if not drink_preferences:
+      print "Don't care for a drink, eh?"
+    else:
+      # Make drink and print name and ingredients
+      drink = drink_make(drink_preferences)
+      print ""
+      print "Here is your: {}, which includes:".format(drink_name())
+      for ingredient in drink:
+        print "A {}".format(ingredient)
+      print ""
+        
+      # Offer to save customer drink preferences if not an existing customer
+      if not customer_name:
+        customer_name = raw_input("Didn't catch your name. If you give it to me, I'll remember what you like.  Gotta mind like a steel trap.")                               
+      # Save customer drink preferences to customers dictionary
+      customers[customer_name] = drink_preferences  
+                               
       
 if __name__ == "__main__":
   main()
