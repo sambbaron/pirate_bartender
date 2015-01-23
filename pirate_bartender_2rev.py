@@ -1,4 +1,4 @@
-# First version of Pirate Bartender
+# Pirate Bartender with selected revisions from sample solution
 
 import random
 
