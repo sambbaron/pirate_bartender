@@ -1,4 +1,4 @@
-# Pirate Bartender with cocktail naming and multiple drinks
+# Pirate Bartender with multiple customers
 
 import random
 
