@@ -26,9 +26,11 @@ def drink_style_input():
   answers_style = {} 
   # Loop through style questions
   for style, question in questions.iteritems():
-    # Ask whether they like a drink style and set to lower case
+    # Ask whether they like a drink style and return boolean
+    style_answer = raw_input(questions[style]).lower() in ["y","yes"]
     # Test if answer is yes, then add drink style and boolean to dictionary
-    answers_style[style] = raw_input(questions[style]).lower() in ["y","yes"]
+    if style_answer == True: 
+      answers_style[style] = style_answer
   return answers_style
       
 def drink_make(drink_styles):
@@ -57,21 +59,7 @@ def drink_name():
 
 def main():
   """Run Pirate Bartender - Ask user for styles and return drink ingredients"""
-  print "Answer ye some riddles about your favorite libation. Please answer (y)es or (n)o."
-  print ""
-  answers_style = drink_style_input()
-  print ""
-  # Test whether any answers are yes
-  if not answers_style:
-    print "Don't care for a drink, eh?"
-  else:
-    drink = drink_make(answers_style)
-    print "Here is your: {}, which includes:".format(drink_name())
-    for ingredient in drink:
-      print "A {}".format(ingredient)
-      
-if __name__ == "__main__":
-  # Create drinks while user input is yes
+  # Define questions for subsequent drinks
   drink_questions = ["Would you like a drink?  Please answer (y)es or (n)o.", 
                     "How about another?",
                     "Must have been a hard day swabbing decks. Another drink?",
@@ -79,13 +67,29 @@ if __name__ == "__main__":
                     "You drunk bastard.  I'm cutting you off."]
   # Loop through customer questions
   for question in drink_questions:
-    # Test for positive answer - if so, run drink
+    # Ask drink question
     print ""
     customer_answer = raw_input(question) in ["y","yes"]
     print ""
-    if customer_answer == True and drink_questions.index(question) != len(drink_questions):      
-      main()
+    # Test for positive answer - if so, then make drink
+    if customer_answer == True and drink_questions.index(question) != len(drink_questions):
+      print "Answer ye some riddles about your favorite libation. Please answer (y)es or (n)o."
+      print ""
+      answers_style = drink_style_input()
+      print ""
+      # Test whether any answers are yes
+      if not answers_style:
+        print "Don't care for a drink, eh?"
+        break
+      else:
+        drink = drink_make(answers_style)
+        print "Here is your: {}, which includes:".format(drink_name())
+        for ingredient in drink:
+          print "A {}".format(ingredient)
     else:
       if drink_questions.index(question) > 0:
         print "See ya later, and you better tip me well or I'll cut off your other leg."
       break
+      
+if __name__ == "__main__":
+  main()
